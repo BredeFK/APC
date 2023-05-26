@@ -3,8 +3,17 @@
 ## About
 
 Here is my collection of scripts I find cool or usefully.
-It's categorised by the folders, so the folder `Spotify` is (currently) for writing all tracks from a specified playlist
+It's categorised by the folders.
+
+### Spotify
+
+Spotify-folder is (currently) for writing all tracks from a specified playlist
 in to a file. There will be another README file in each category explaining further how it works.
+
+### Organize_Folder
+
+This folder is to get all song files in one folder, so you don't have to go in to each folder in a folder in a folder to
+move them out. This will not delete the empty folders afterwards, only move the songs.
 
 ## Other
 

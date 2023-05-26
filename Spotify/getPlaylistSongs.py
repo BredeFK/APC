@@ -4,19 +4,22 @@ import os.path
 import requests
 from dotenv import dotenv_values
 import util.colors as colors
+import util.printWithColors as printColor
 
 BASE_URL = "https://api.spotify.com/v1"
 BASE_URL_ACCESS_TOKEN = "https://accounts.spotify.com/api/token"
 
 
 def main():
-    print("Starting...")
+    printColor.blue("Starting...")
     config = dotenv_values(".env")
     token = get_token(config)
     if token != 0:
         response = make_request_to_spotify(f'/playlists/{config["PLAYLIST_ID"]}', token)
         if response != "":
             prettify_tracks(response)
+    else:
+        printColor.red("Could not get token")
 
 
 def init_access_token(client_credentials, client_id, client_secret):
@@ -32,8 +35,10 @@ def init_access_token(client_credentials, client_id, client_secret):
         file = open("access_token.txt", "w")
         file.write(response["access_token"])
         file.close()
+        return response["access_token"]
     else:
-        print(f'Something went wrong: {req.status_code} {response}')
+        printColor.red(f'Something went wrong: {req.status_code} {response}')
+        return 0
 
 
 def get_token(config):
@@ -41,9 +46,8 @@ def get_token(config):
         file = open("access_token.txt", "r")
         return file.read()
     else:
-        print("Getting a fresh token")
-        init_access_token("client_credentials", config["CLIENT_ID"], config["CLIENT_SECRET"])
-        get_token(config)
+        printColor.blue("Getting a fresh token")
+        return init_access_token("client_credentials", config["CLIENT_ID"], config["CLIENT_SECRET"])
 
 
 def make_request_to_spotify(url_suffix, token):
@@ -54,9 +58,9 @@ def make_request_to_spotify(url_suffix, token):
     req = requests.get(url=f'{BASE_URL}{url_suffix}?market=NO', headers=headers)
     response = req.json()
     if req.status_code == 200:
-        print("Success!")
+        printColor.green("Success!")
     else:
-        print(f'Error getting body {req.status_code}: {response}')
+        printColor.red(f'Error getting body {req.status_code}: {response}')
         return ""
 
     return response
@@ -65,7 +69,7 @@ def make_request_to_spotify(url_suffix, token):
 def prettify_tracks(json_response):
     tracks = json_response["tracks"]
     if tracks["total"] == tracks["limit"]:
-        print("Response may have been limited!")
+        printColor.red("Response may have been limited!")
 
     playlist_name = json_response["name"]
     owner = json_response["owner"]["display_name"]
