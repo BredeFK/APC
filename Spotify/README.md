@@ -18,7 +18,7 @@ PLAYLIST_ID="<playlistid>"
 
 ## Run the stuff
 
-For now you need to do the above and run the script once. If everything went good, you will get this message:
+For now, you need to do the above and run the script once. If everything went good, you will get this message:
 
 ```
 Starting...
@@ -26,4 +26,5 @@ Getting a fresh token
 Error getting body 401: {'error': {'status': 401, 'message': 'Invalid access token'}}
 ```
 
-Then you run it again, and you should get a better message. This *could* be solved in a nicer way, but im lazy
+Then you run it again, and you should get a better message. This *could* be solved in a nicer way, but im lazy.
+The playlist songs will end up in the folder `/playlists/<playlist_name>_<playlist_creator>.txt`
