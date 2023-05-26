@@ -18,14 +18,20 @@ move them out. This will not delete the empty folders afterwards, only move the 
 #### Example
 
 File structure before: <br>
-`complete/userxD/another_folder/KJØPE HELE SVERIGE.flacc` <br>
-`complete/tempyBoi/01.02.2023 - DNB /hackers.mp3` <br>
-`complete/tempyBoi/12.12.2020 - Pop /baby.mp3` <br>
+
+```
+complete/userxD/another_folder/KJØPE HELE SVERIGE.flacc
+complete/tempyBoi/01.02.2023 - DNB /hackers.mp3
+complete/tempyBoi/12.12.2020 - Pop /baby.mp3
+```
 
 File structure after: <br>
-`songs/KJØPE HELE SVERIGE.flacc` <br>
-`songs/hackers.mp3` <br>
-`songs/baby.mp3` <br>
+
+```
+songs/KJØPE HELE SVERIGE.flacc
+songs/hackers.mp3
+songs/baby.mp3
+```
 
 ## Other
 
