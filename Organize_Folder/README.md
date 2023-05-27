@@ -6,7 +6,8 @@
 * An .env file that looks like below:
 
 ```.env
-SOURCE_PATH="<sourcepath>"
+SOURCE_PATH="<source_path>"
+DESTINATION="<destinaion_path>"
 ```
 
 <small>Last updated 2023-05-26</small>

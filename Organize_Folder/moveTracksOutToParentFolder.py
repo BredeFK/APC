@@ -7,11 +7,10 @@ import util.printWithColors as printColors
 
 config = dotenv_values(".env")
 SOURCE_PATH = config["SOURCE_PATH"]
-DESTINATION = f'{SOURCE_PATH}\\Songs'
+DESTINATION = config["DESTINATION"]
 
 
 def main():
-    print(SOURCE_PATH)
     if os.path.exists(SOURCE_PATH):
         printColors.green("File exists")
         organize_files()
