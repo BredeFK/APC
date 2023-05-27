@@ -5,6 +5,12 @@
 Here is my collection of scripts I find cool or usefully.
 It's categorised by the folders.
 
+### SoulseekAPI
+
+Not really a script, and more like a .NET project. This is needed as I couldn't find an API for Soulseek, but found a
+.NET package. I will probably try to have this on Azure functions some time. It currently has two endpoints, one for
+getting search results and one for downloading songs.
+
 ### Spotify
 
 Spotify-folder is (currently) for writing all tracks from a specified playlist
