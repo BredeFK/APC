@@ -22,18 +22,18 @@ namespace SoulseekAPI.Controllers
         }
 
         [HttpGet(Name = "GetSoulseekSongs")]
-        public async Task<List<Track>> Get(string songName, string? filterType, int? minSize, int? maxSize)
+        public async Task<List<Track>> Get(string song, string artist, string? filterType, string exclude, long? minSize, long? maxSize)
         {
-            var list = await _soulSeekService.GetTracks(songName, filterType, minSize, maxSize);
-
+            _logger.LogInformation("GET " + song + " by " + artist);
+            var list = await _soulSeekService.GetTracks(song, artist, filterType, exclude, minSize, maxSize);
             return list;
         }
 
         [HttpPost(Name = "DownloadSoulseekSong")]
-        public async Task Post(Track track)
+        public async Task Post(Track track, string folder)
         {
-            await _soulSeekService.DownloadTrack(track);
-
+            _logger.LogInformation("POST " + track.Name + " to folder " + folder);
+            await _soulSeekService.DownloadTrack(track, folder);
         }
     }
 }

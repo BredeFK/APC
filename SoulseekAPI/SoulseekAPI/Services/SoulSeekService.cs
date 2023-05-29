@@ -32,15 +32,18 @@ namespace SoulseekAPI.Service
             }
         }
 
-        public async Task<List<Track>> GetTracks(string songName, string? filterType, int? minSize, int? maxSize)
+        public async Task<List<Track>> GetTracks(string songName, string artist, string? filterType, string exclude, long? minSize, long? maxSize)
         {
             await Connect();
-            var query = SearchQuery.FromText(songName);
+
+            var excludeList = exclude.Split(',').ToList();
+            excludeList.RemoveAt(excludeList.Count - 1);
+
+            var query = SearchQuery.FromText(songName + " " + artist);
             var searchResults = await _soulseekClient.SearchAsync(query);
-            var tracks = GetTrackList(searchResults.Responses);
+            var tracks = GetTrackList(searchResults.Responses, songName, excludeList);
 
             var list = tracks;
-
 
             if (filterType != null)
             {
@@ -63,20 +66,29 @@ namespace SoulseekAPI.Service
                 list = tracks;
             }
 
-            list = list.OrderByDescending(x => x.Size).Take(10).ToList();
+            list = list.OrderBy(x => x.HasFreeUploadSlot).ThenByDescending(x => x.Size).ThenBy(x => x.UploadSpeed).Take(10).ToList();
 
 
             return list;
         }
 
-        public async Task DownloadTrack(Track track)
+        public async Task DownloadTrack(Track track, string folder)
         {
             await Connect();
-            await _soulseekClient.DownloadAsync(track.Username, track.OriginalName, track.Name);
+            var path = "Songs\\" +folder + "\\" + track.Name;
+
+            try
+            {
+                await _soulseekClient.DownloadAsync(track.Username, track.OriginalName, path);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString(), ex);
+            }
 
         }
 
-        private List<Track> GetTrackList(IReadOnlyCollection<SearchResponse> response)
+        private List<Track> GetTrackList(IReadOnlyCollection<SearchResponse> response, string songName, List<string> excludeList)
         {
             var list = new List<Track>();
             foreach (var result in response)
@@ -89,10 +101,29 @@ namespace SoulseekAPI.Service
                         Name = file.Filename.Split('\\').Last(),
                         OriginalName = file.Filename,
                         Type = file.Filename.Split('.').Last(),
-                        Size = file.Size
+                        Size = file.Size,
+                        QueueLength = result.QueueLength,
+                        UploadSpeed = result.UploadSpeed,
+                        HasFreeUploadSlot = result.HasFreeUploadSlot
                     };
 
-                    list.Add(track);
+                    var trackName = track.Name.ToUpper();
+                    if (trackName.Contains(songName.ToUpper()) && track.QueueLength <= 5)
+                    {
+                        var containsName = false;
+                        foreach (var excludeName in excludeList)
+                        {
+                            if (trackName.Contains(excludeName.ToUpper()))
+                            {
+                                containsName = true;
+                            }
+                        }
+
+                        if (!containsName)
+                        {
+                            list.Add(track);
+                        }
+                    }
                 }
             }
             return list;
