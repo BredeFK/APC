@@ -1,9 +1,8 @@
-# Scripts
+# APC : Automated Playlist Converter
 
 ## About
 
-Here is my collection of scripts I find cool or usefully.
-It's categorised by the folders.
+This is a repository for trying to automatically convert Spotify (and potentially other services') playlists.
 
 ### SoulseekAPI
 
